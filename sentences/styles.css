@@ -5,6 +5,14 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+.milky {
+  font-size: 80px;
+  color: #3366FF;
+  text-shadow: 0 8px 10px #6699FF;
+  font-weight: bolder;
+  text-align: center;
+}
+
 :root {
   --bg-color: #ffffff;
   --text-color: #333333;
