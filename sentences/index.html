@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>句子展示</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="theme-switcher">
+    <button id="theme-toggle">切换主题</button>
+  </div>
+  <div class="sentence-container">
+    <h1>OmniAPI</h1>
+    <div class="sentence-options">
+      <div class="sentence-option">
+        <input type="radio" id="one" name="api" value="one">
+        <label for="one">ONE 一句</label>
+      </div>
+      <div class="sentence-option">
+        <input type="radio" id="hitokoto" name="api" value="hitokoto">
+        <label for="hitokoto">一言网 (Hitokoto)</label>
+        <select class="hitokoto-type" style="display: none;">
+          <option value="a">动画</option>
+          <option value="b">漫画</option>
+          <option value="c">游戏</option>
+          <option value="d">文学</option>
+          <option value="e">原创</option>
+          <option value="f">来自网络</option>
+          <option value="g">其他</option>
+          <option value="h">影视</option>
+          <option value="i">诗词</option>
+          <option value="j">网易云</option>
+          <option value="k">哲学</option>
+          <option value="l">抖机灵</option>
+        </select>
+      </div>
+      <div class="sentence-option">
+        <input type="radio" id="random-sentence" name="api" value="random-sentence">
+        <label for="random-sentence">随机中英文句子</label>
+      </div>
+      <div class="sentence-option">
+        <input type="radio" id="poetry" name="api" value="poetry">
+        <label for="poetry">随机一句诗</label>
+      </div>
+      <div class="sentence-option">
+        <input type="radio" id="love-words" name="api" value="love-words">
+        <label for="love-words">随机情话</label>
+      </div>
+      <div class="sentence-option">
+        <input type="radio" id="shadiao" name="api" value="shadiao">
+        <label for="shadiao">沙雕APP</label>
+        <select class="shadiao-type" style="display: none;">
+          <option value="chp">彩虹屁</option>
+          <option value="pyq">朋友圈文案</option>
+          <option value="du">毒鸡汤</option>
+          <option value="kfc">疯狂星期四</option>
+        </select>
+      </div>
+    </div>
+    <div class="sentence-display">
+      <div class="sentence-text">请选择一个句子类型</div>
+    </div>
+  </div>
+  <script src="api.js"></script>
+  <script>
+    // 主题切换功能
+    const themeToggle = document.getElementById('theme-toggle');
+    const htmlElement = document.documentElement;
+
+    // 初始化主题
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    htmlElement.setAttribute('data-theme', savedTheme);
+    themeToggle.textContent = savedTheme === 'light' ? '🌙 暗黑模式' : '☀️ 明亮模式';
+
+    // 切换主题
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = htmlElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      htmlElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      themeToggle.textContent = newTheme === 'light' ? '🌙 暗黑模式' : '☀️ 明亮模式';
+    });
+  </script>
+</body>
+</html>
