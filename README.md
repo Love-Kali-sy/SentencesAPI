@@ -1,74 +1,124 @@
 # SentencesAPI
 
-这是一个提供多种句子API调用的项目，包含以下API接口：
+一个提供多种句子API调用的项目，支持多种句子类型的获取，适合学习、娱乐或开发使用。
 
-## 1. ONE·一个
-- API：`https://api.xygeng.cn/one`
-- 响应结构：
-```json
-{
-    "code": 200,
-    "data": {
-        "id": 2327,
-        "tag": "寥寥此生虚度",
-        "name": "佚名",
-        "origin": "_萧彬",
-        "content": "浮生寻乐，寥寥此生~",
-        "created_at": "2019-03-15T23:33:11.000Z",
-        "updated_at": "2022-03-09T08:42:10.000Z"
-    },
-    "error": null,
-    "updateTime": 1742636923593
-}
-```
-- 所需字段：`content`
+## 功能特性
+- 支持多种句子类型，包括 ONE 一句、一言网、随机中英文句子、古诗词、情话、沙雕文案等。
+- 提供主题切换功能（明亮模式和暗黑模式）。
+- 支持自动刷新句子内容。
+- 响应快速，界面简洁。
 
-## 2. 一言(Hitokoto)
-- API：`https://cdn.jsdelivr.net/gh/hitokoto-osc/sentences-bundle@1.0.399/sentences/<select>.json`
-- 参数说明：类型参数来自`<select>`选项的value值（a-l）
+## 支持的API接口及调用方式
 
-## 3. 随机中英文
-- API：`https://api.kekc.cn/api/yien`
-- 响应结构：
-```json
-{
-    "cn": "人生不总在于握有一手好牌，有时也要打好一把烂牌。",
-    "en": "Life is not always a matter of holding good cards, but sometimes, playing a poor hand well.",
-    "audio": "http://api.kekc.cn/api/yien?act=getaudio&filename=MjAyMy0wNy0wNC5tcDM=",
-    "count": 2638
-}
-```
-- 所需字段：`cn` 和 `en`
+### 1. ONE·一个
+- **API**：`https://api.xygeng.cn/one`
+- **请求方式**：GET
+- **返回字段**：`content`（句子内容）
+- **示例代码**：
+  ```javascript
+  fetch('https://api.xygeng.cn/one')
+    .then(response => response.json())
+    .then(data => console.log(data.data.content));
+  ```
 
-## 4. 古诗词
-- API：`https://v1.jinrishici.com/rensheng.txt`
-- 响应格式：纯文本
+### 2. 一言 (Hitokoto)
+- **API**：`https://cdn.jsdelivr.net/gh/hitokoto-osc/sentences-bundle@1.0.399/sentences/<type>.json`
+- **请求方式**：GET
+- **参数说明**：`<type>` 为句子类型（a-l），如动画、漫画、游戏等。
+- **返回字段**：`hitokoto`（句子内容）
+- **示例代码**：
+  ```javascript
+  const type = 'a'; // 动画类型
+  fetch(`https://cdn.jsdelivr.net/gh/hitokoto-osc/sentences-bundle@1.0.399/sentences/${type}.json`)
+    .then(response => response.json())
+    .then(data => {
+      const randomIndex = Math.floor(Math.random() * data.length);
+      console.log(data[randomIndex].hitokoto);
+    });
+  ```
 
-## 5. 沙雕APP
-- 彩虹屁：`https://api.shadiao.pro/chp`
-- 朋友圈文案：`https://api.shadiao.pro/pyq`
-- 毒鸡汤：`https://api.shadiao.pro/du`
-- 疯狂星期四：`https://api.shadiao.pro/kfc`
-- 响应格式：
-```json
-{
-    "data": {
-        "type": "彩虹屁",
-        "text": "甜有100种方式，吃糖，吃蛋糕，还有98词的想你"
-    }
-}
-```
-- 所需字段：`text`
+### 3. 随机中英文句子
+- **API**：`https://api.kekc.cn/api/yien`
+- **请求方式**：GET
+- **返回字段**：`cn`（中文句子），`en`（英文句子）
+- **示例代码**：
+  ```javascript
+  fetch('https://api.kekc.cn/api/yien')
+    .then(response => response.json())
+    .then(data => console.log(`${data.cn}\n${data.en}`));
+  ```
 
-## 6. 情话API
-- API：`https://api.lovelive.tools/api/SweetNothings`
-- 响应格式：纯文本
+### 4. 古诗词
+- **API**：`https://v1.jinrishici.com/rensheng.txt`
+- **请求方式**：GET
+- **返回格式**：纯文本
+- **示例代码**：
+  ```javascript
+  fetch('https://v1.jinrishici.com/rensheng.txt')
+    .then(response => response.text())
+    .then(data => console.log(data));
+  ```
+
+### 5. 沙雕APP
+- **API**：
+  - 彩虹屁：`https://api.shadiao.pro/chp`
+  - 朋友圈文案：`https://api.shadiao.pro/pyq`
+  - 毒鸡汤：`https://api.shadiao.pro/du`
+  - 疯狂星期四：`https://api.shadiao.pro/kfc`
+- **请求方式**：GET
+- **返回字段**：`text`（句子内容）
+- **示例代码**：
+  ```javascript
+  const type = 'chp'; // 彩虹屁
+  fetch(`https://api.shadiao.pro/${type}`)
+    .then(response => response.json())
+    .then(data => console.log(data.data.text));
+  ```
+
+### 6. 情话API
+- **API**：`https://api.lovelive.tools/api/SweetNothings`
+- **请求方式**：GET
+- **返回格式**：纯文本
+- **示例代码**：
+  ```javascript
+  fetch('https://api.lovelive.tools/api/SweetNothings')
+    .then(response => response.text())
+    .then(data => console.log(data));
+  ```
 
 ## 使用方法
-1. 克隆本仓库
-2. 打开`index.html`文件
-3. 选择需要的API类型
-4. 点击获取句子
+1. **克隆本仓库**：
+   ```bash
+   git clone https://github.com/Love-Kali-sy/SentencesAPI.git
+   ```
+2. **打开项目目录**：
+   ```bash
+   cd SentencesAPI
+   ```
+3. **运行服务**：
+   - 后台运行：
+     ```bash
+     python app.py start
+     ```
+   - 前台运行：
+     ```bash
+     python app.py run
+     ```
+4. **访问页面**：
+   打开浏览器，访问 [http://localhost:8000](http://localhost:8000)。
+
+5. **选择句子类型**：
+   - 打开 `index.html` 页面。
+   - 选择需要的句子类型。
+   - 点击获取句子。
+
+## 自动刷新功能
+- 支持设置自动刷新间隔（最小5秒）。
+- 点击“开始自动刷新”按钮后，句子会根据设置的时间间隔自动更新。
 
 ## 开源地址
-本项目已开源，地址：[https://github.com/Love-Kali-sy/SentencesAPI](https://github.com/Love-Kali-sy/SentencesAPI)
+本项目已开源，欢迎贡献代码或提出建议：
+[https://github.com/Love-Kali-sy/SentencesAPI](https://github.com/Love-Kali-sy/SentencesAPI)
+
+## 许可证
+本项目基于 MIT 许可证开源。
