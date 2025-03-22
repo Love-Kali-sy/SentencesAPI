@@ -105,7 +105,7 @@
      python app.py run
      ```
 4. **访问页面**：
-   打开浏览器，访问 [http://localhost:8000](http://localhost:8000)。
+   打开浏览器，访问 [http://localhost:8389](http://localhost:8389)。
 
 5. **选择句子类型**：
    - 打开 `index.html` 页面。

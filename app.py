@@ -10,35 +10,8 @@ import winreg
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QPushButton, QVBoxLayout,
                              QWidget, QLabel, QCheckBox, QMessageBox, QHBoxLayout,
                              QSystemTrayIcon, QMenu, QAction)
-from PyQt5.QtCore import Qt, QTimer, QEvent  # 添加QEvent导入
+from PyQt5.QtCore import Qt, QTimer, QEvent
 from PyQt5.QtGui import QFont, QIcon
-
-def main():
-    # 必须先创建QApplication实例
-    app = QApplication(sys.argv)
-    app.setQuitOnLastWindowClosed(False)
-    
-    # 然后创建主窗口
-    window = MainWindow()
-    window.show()
-    
-    # 最后启动事件循环
-    sys.exit(app.exec_())
-
-class MainWindow(QMainWindow):
-    def changeEvent(self, event):
-        # 修复事件类型判断
-        if event.type() == QEvent.WindowStateChange:
-            if self.windowState() & Qt.WindowMinimized:
-                self.minimize_to_tray()
-                event.ignore()
-        super().changeEvent(event)  # 添加父类调用
-
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    app.setQuitOnLastWindowClosed(False)
-    window = MainWindow
 
 class ServerThread(threading.Thread):
     def __init__(self, port=8389):
@@ -56,6 +29,7 @@ class ServerThread(threading.Thread):
         if self.server:
             self.server.shutdown()
             self.server.server_close()
+
 class PortChecker:
     @staticmethod
     def check_port(port):
@@ -96,7 +70,7 @@ class AutoStartManager:
     def enable_auto_start(cls):
         try:
             key = OpenKey(HKEY_CURRENT_USER, cls.REG_PATH, 0, KEY_ALL_ACCESS)
-            exe_path = os.path.abspath(sys.argv[0])
+            exe_path = f'"{os.path.abspath(sys.argv[0])}" --autostart'  # 添加启动参数
             SetValueEx(key, cls.APP_NAME, 0, winreg.REG_SZ, exe_path)
             CloseKey(key)
             return True
@@ -119,9 +93,9 @@ class AutoStartManager:
     def is_auto_start_enabled(cls):
         try:
             key = OpenKey(HKEY_CURRENT_USER, cls.REG_PATH)
-            QueryValueEx(key, cls.APP_NAME)
+            value, _ = QueryValueEx(key, cls.APP_NAME)
             CloseKey(key)
-            return True
+            return "--autostart" in value  # 检查参数是否存在
         except FileNotFoundError:
             return False
         except Exception as e:
@@ -129,23 +103,24 @@ class AutoStartManager:
             return False
 
 class MainWindow(QMainWindow):
-    def __init__(self, parent=None):
-        # 必须调用父类构造函数
-        super().__init__(parent)
-        
-        # 初始化成员变量
+    def __init__(self):
+        super().__init__()
         self.server_thread = None
         self.tray_icon = None
+        self.is_auto_start = "--autostart" in sys.argv  # 检测自动启动模式
         
-        # 按正确顺序初始化
         self.init_ui()
         self.init_tray()
         self.check_auto_start()
 
+        if self.is_auto_start:  # 自动启动模式
+            self.hide()
+            self.start_server()
+
     def init_ui(self):
-        self.setWindowTitle("SentencesAPI启动器")
+        self.setWindowTitle("静态文件服务器")
         self.setFixedSize(380, 280)
-        self.setWindowFlags(Qt.FramelessWindowHint | Qt.WindowMinimizeButtonHint)
+        self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
 
         # 主布局
@@ -158,26 +133,23 @@ class MainWindow(QMainWindow):
         title_layout = QHBoxLayout(title_bar)
         title_layout.setContentsMargins(12, 5, 8, 5)
 
-        # 标题
-        title = QLabel("SentencesAPI启动器")
+        title = QLabel("文件服务器控制台")
         title.setFont(QFont("微软雅黑", 11, QFont.Bold))
         
-        # 控制按钮容器
+        # 控制按钮
         btn_container = QWidget()
         btn_layout = QHBoxLayout(btn_container)
         btn_layout.setContentsMargins(0, 0, 0, 0)
         btn_layout.setSpacing(6)
 
-        # 最小化按钮
         min_btn = QPushButton("−")
         min_btn.setFixedSize(16, 16)
-        min_btn.clicked.connect(self.minimize_to_tray)  # 修改这里
+        min_btn.clicked.connect(self.minimize_to_tray)
         min_btn.setObjectName("minButton")
 
-        # 关闭按钮
         close_btn = QPushButton("×")
         close_btn.setFixedSize(16, 16)
-        close_btn.clicked.connect(self.close)
+        close_btn.clicked.connect(self.quit_app)
         close_btn.setObjectName("closeButton")
 
         btn_layout.addWidget(min_btn)
@@ -200,7 +172,6 @@ class MainWindow(QMainWindow):
         self.auto_start_cb = QCheckBox("开机自动启动")
         self.auto_start_cb.stateChanged.connect(self.toggle_auto_start)
 
-        # 布局组合
         main_layout.addWidget(title_bar)
         main_layout.addSpacing(15)
         main_layout.addWidget(self.status_label)
@@ -209,7 +180,6 @@ class MainWindow(QMainWindow):
         main_layout.addWidget(self.auto_start_cb)
         main_layout.addStretch()
 
-        # 应用样式
         self.setStyleSheet('''
             #mainWidget {
                 background: #FFFFFF;
@@ -259,11 +229,46 @@ class MainWindow(QMainWindow):
 
         self.setCentralWidget(main_widget)
 
-    def open_browser(self):
-        try:
-            webbrowser.open(f"http://localhost:8389", new=2)
-        except Exception as e:
-            QMessageBox.warning(self, "警告", f"无法打开浏览器: {str(e)}")
+    def init_tray(self):
+        self.tray_icon = QSystemTrayIcon(self)
+        self.tray_icon.setIcon(QIcon("ico.ico"))
+        
+        tray_menu = QMenu()
+        show_action = QAction("显示主界面", self)
+        show_action.triggered.connect(self.show_normal)
+        tray_menu.addAction(show_action)
+        
+        quit_action = QAction("退出程序", self)
+        quit_action.triggered.connect(self.quit_app)
+        tray_menu.addAction(quit_action)
+        
+        self.tray_icon.setContextMenu(tray_menu)
+        self.tray_icon.activated.connect(self.tray_icon_clicked)
+        self.tray_icon.show()
+
+    def show_normal(self):
+        self.showNormal()
+        self.activateWindow()
+
+    def tray_icon_clicked(self, reason):
+        if reason == QSystemTrayIcon.DoubleClick:
+            self.show_normal()
+
+    def minimize_to_tray(self):
+        self.hide()
+
+    def quit_app(self):
+        if self.server_thread and self.server_thread.is_alive():
+            self.stop_server()
+        self.tray_icon.hide()
+        QApplication.quit()
+
+    def changeEvent(self, event):
+        if event.type() == QEvent.WindowStateChange:
+            if self.windowState() & Qt.WindowMinimized:
+                self.minimize_to_tray()
+                event.ignore()
+        super().changeEvent(event)
 
     def check_auto_start(self):
         self.auto_start_cb.setChecked(AutoStartManager.is_auto_start_enabled())
@@ -281,15 +286,14 @@ class MainWindow(QMainWindow):
             self.stop_server()
         else:
             self.start_server()
-            # 添加延迟确保服务完全启动
             QTimer.singleShot(500, self.open_browser)
 
     def check_port(self):
-        pid = PortChecker.check_port(8000)
+        pid = PortChecker.check_port(8389)
         if pid:
             reply = QMessageBox.question(
                 self, '端口占用',
-                f'端口8000被进程{pid}占用，是否终止该进程？',
+                f'端口8389被进程{pid}占用，是否终止该进程？',
                 QMessageBox.Yes | QMessageBox.No
             )
             if reply == QMessageBox.Yes:
@@ -304,14 +308,13 @@ class MainWindow(QMainWindow):
         return True
 
     def start_server(self):
-        """启动服务器"""
         if not self.check_port():
             return
             
         self.server_thread = ServerThread()
         self.server_thread.start()
         self.start_btn.setText("停止服务")
-        self.status_label.setText("当前状态：服务运行中\n访问地址：http://localhost:8000")
+        self.status_label.setText("当前状态：服务运行中\n访问地址：http://localhost:8389")
 
     def stop_server(self):
         if self.server_thread:
@@ -319,6 +322,12 @@ class MainWindow(QMainWindow):
             self.server_thread.join()
             self.start_btn.setText("启动服务")
             self.status_label.setText("当前状态：服务已停止")
+
+    def open_browser(self):
+        try:
+            webbrowser.open("http://localhost:8389", new=2)
+        except Exception as e:
+            QMessageBox.warning(self, "警告", f"无法打开浏览器: {str(e)}")
 
     def mousePressEvent(self, event):
         self.oldPos = event.globalPos()
@@ -328,50 +337,16 @@ class MainWindow(QMainWindow):
         self.move(self.x() + delta.x(), self.y() + delta.y())
         self.oldPos = event.globalPos()
 
-    def init_tray(self):
-        # 创建系统托盘图标
-        self.tray_icon = QSystemTrayIcon(self)
-        self.tray_icon.setIcon(QIcon("ico.ico"))  # 需要准备图标文件
-        
-        # 创建托盘菜单
-        tray_menu = QMenu()
-        
-        show_action = QAction("显示主界面", self)
-        show_action.triggered.connect(self.show_normal)
-        tray_menu.addAction(show_action)
-        
-        quit_action = QAction("退出程序", self)
-        quit_action.triggered.connect(self.quit_app)
-        tray_menu.addAction(quit_action)
-        
-        self.tray_icon.setContextMenu(tray_menu)
-        self.tray_icon.activated.connect(self.tray_icon_clicked)
-
-    def show_normal(self):
-        self.showNormal()
-        self.tray_icon.hide()
-
-    def tray_icon_clicked(self, reason):
-        if reason == QSystemTrayIcon.DoubleClick:
-            self.show_normal()
-
-    def minimize_to_tray(self):
-        self.hide()
-        self.tray_icon.show()
-
-    def quit_app(self):
-        if self.server_thread and self.server_thread.is_alive():
-            self.stop_server()
-        self.tray_icon.hide()
-        QApplication.quit()
-
-    def changeEvent(self, event):
-        # 修复事件类型判断
-        if event.type() == QEvent.WindowStateChange:
-            if self.windowState() & Qt.WindowMinimized:
-                self.minimize_to_tray()
-                event.ignore()
-        super().changeEvent(event)  # 添加父类调用
+def main():
+    app = QApplication(sys.argv)
+    app.setQuitOnLastWindowClosed(False)
+    window = MainWindow()
+    
+    # 如果是自动启动模式不显示主窗口
+    if "--autostart" not in sys.argv:
+        window.show()
+    
+    sys.exit(app.exec_())
 
 if __name__ == "__main__":
     main()
