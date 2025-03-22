@@ -13,12 +13,50 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QPushButton, QVBoxLayout
 from PyQt5.QtCore import Qt, QTimer, QEvent
 from PyQt5.QtGui import QFont, QIcon
 
+class CustomHandler(SimpleHTTPRequestHandler):
+    def do_POST(self):
+        content_length = int(self.headers['Content-Length'])
+        post_data = self.rfile.read(content_length).decode('utf-8')
+        
+        try:
+            with open('sentence.txt', 'w', encoding='utf-8') as f:
+                f.write(post_data)
+            self.send_response(200)
+            self.send_header('Content-type', 'text/plain')
+            self.end_headers()
+            self.wfile.write(b'File saved successfully')
+        except Exception as e:
+            self.send_error(500, f"Error saving file: {str(e)}")
+            
+    def do_GET(self):
+        # 解析查询参数
+        query = self.path.split('?', 1)
+        params = {}
+        if len(query) > 1:
+            from urllib.parse import parse_qs
+            params = parse_qs(query[1])
+        # 处理 model=text 的请求
+        if self.path.startswith('/') and params.get('model', [''])[0] == 'text':
+            try:
+                with open('sentence.txt', 'r', encoding='utf-8') as f:
+                    content = f.read()
+                self.send_response(200)
+                self.send_header('Content-type', 'text/plain; charset=utf-8')
+                self.end_headers()
+                self.wfile.write(content.encode('utf-8'))
+                return
+            except FileNotFoundError:
+                self.send_error(404, "File not found")
+                return
+        # 其他请求正常处理
+        super().do_GET()
+
 class ServerThread(threading.Thread):
     def __init__(self, port=8389):
         super().__init__()
         self.port = port
         self.server = None
-        self.handler = SimpleHTTPRequestHandler
+        self.handler = CustomHandler  
 
     def run(self):
         os.chdir("static")

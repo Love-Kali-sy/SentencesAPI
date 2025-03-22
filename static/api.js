@@ -82,6 +82,14 @@ document.addEventListener('DOMContentLoaded', function() {
               content = '请选择有效的句子类型';
           }
           displayArea.innerHTML = `<div class="sentence-text">${content}</div>`;
+            // 新增保存到服务器的代码
+          fetch('/save_sentence', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'text/plain; charset=utf-8'
+            },
+            body: content
+          }).catch(error => console.error('保存失败:', error));
         } catch (error) {
           console.error('获取句子失败:', error);
           displayArea.innerHTML = '获取句子失败，请稍后重试';
