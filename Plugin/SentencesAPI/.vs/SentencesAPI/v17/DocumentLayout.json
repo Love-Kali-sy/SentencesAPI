@@ -1,0 +1,104 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\sentences\\Plugin\\SentencesAPI\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{16E05866-8B7B-444B-A045-6672B6DC8EDE}|SentencesAPI\\SentencesAPI.csproj|d:\\sentences\\plugin\\sentencesapi\\sentencesapi\\sentencesapi.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{16E05866-8B7B-444B-A045-6672B6DC8EDE}|SentencesAPI\\SentencesAPI.csproj|solutionrelative:sentencesapi\\sentencesapi.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{16E05866-8B7B-444B-A045-6672B6DC8EDE}|SentencesAPI\\SentencesAPI.csproj|d:\\sentences\\plugin\\sentencesapi\\sentencesapi\\manifest.yml||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{16E05866-8B7B-444B-A045-6672B6DC8EDE}|SentencesAPI\\SentencesAPI.csproj|solutionrelative:sentencesapi\\manifest.yml||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{16E05866-8B7B-444B-A045-6672B6DC8EDE}|SentencesAPI\\SentencesAPI.csproj|d:\\sentences\\plugin\\sentencesapi\\sentencesapi\\sentencesapi.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{16E05866-8B7B-444B-A045-6672B6DC8EDE}|SentencesAPI\\SentencesAPI.csproj|solutionrelative:sentencesapi\\sentencesapi.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{16E05866-8B7B-444B-A045-6672B6DC8EDE}|SentencesAPI\\SentencesAPI.csproj|d:\\sentences\\plugin\\sentencesapi\\sentencesapi\\plugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{16E05866-8B7B-444B-A045-6672B6DC8EDE}|SentencesAPI\\SentencesAPI.csproj|solutionrelative:sentencesapi\\plugin.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{16E05866-8B7B-444B-A045-6672B6DC8EDE}|SentencesAPI\\SentencesAPI.csproj|d:\\sentences\\plugin\\sentencesapi\\sentencesapi\\assemblyinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{16E05866-8B7B-444B-A045-6672B6DC8EDE}|SentencesAPI\\SentencesAPI.csproj|solutionrelative:sentencesapi\\assemblyinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "SentencesAPI.xaml.cs",
+              "DocumentMoniker": "D:\\sentences\\Plugin\\SentencesAPI\\SentencesAPI\\SentencesAPI.xaml.cs",
+              "RelativeDocumentMoniker": "SentencesAPI\\SentencesAPI.xaml.cs",
+              "ToolTip": "D:\\sentences\\Plugin\\SentencesAPI\\SentencesAPI\\SentencesAPI.xaml.cs",
+              "RelativeToolTip": "SentencesAPI\\SentencesAPI.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-22T12:54:58.129Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "SentencesAPI.xaml",
+              "DocumentMoniker": "D:\\sentences\\Plugin\\SentencesAPI\\SentencesAPI\\SentencesAPI.xaml",
+              "RelativeDocumentMoniker": "SentencesAPI\\SentencesAPI.xaml",
+              "ToolTip": "D:\\sentences\\Plugin\\SentencesAPI\\SentencesAPI\\SentencesAPI.xaml",
+              "RelativeToolTip": "SentencesAPI\\SentencesAPI.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-03-22T12:54:30.012Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Plugin.cs",
+              "DocumentMoniker": "D:\\sentences\\Plugin\\SentencesAPI\\SentencesAPI\\Plugin.cs",
+              "RelativeDocumentMoniker": "SentencesAPI\\Plugin.cs",
+              "ToolTip": "D:\\sentences\\Plugin\\SentencesAPI\\SentencesAPI\\Plugin.cs",
+              "RelativeToolTip": "SentencesAPI\\Plugin.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAkAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-22T12:53:11.869Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "manifest.yml",
+              "DocumentMoniker": "D:\\sentences\\Plugin\\SentencesAPI\\SentencesAPI\\manifest.yml",
+              "RelativeDocumentMoniker": "SentencesAPI\\manifest.yml",
+              "ToolTip": "D:\\sentences\\Plugin\\SentencesAPI\\SentencesAPI\\manifest.yml",
+              "RelativeToolTip": "SentencesAPI\\manifest.yml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
+              "WhenOpened": "2025-03-22T12:53:10.001Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AssemblyInfo.cs",
+              "DocumentMoniker": "D:\\sentences\\Plugin\\SentencesAPI\\SentencesAPI\\AssemblyInfo.cs",
+              "RelativeDocumentMoniker": "SentencesAPI\\AssemblyInfo.cs",
+              "ToolTip": "D:\\sentences\\Plugin\\SentencesAPI\\SentencesAPI\\AssemblyInfo.cs",
+              "RelativeToolTip": "SentencesAPI\\AssemblyInfo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvwAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-22T12:53:08.212Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

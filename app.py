@@ -5,7 +5,7 @@ import webbrowser
 import subprocess
 import threading
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
-from winreg import HKEY_CURRENT_USER, OpenKey, SetValueEx, QueryValueEx, CloseKey, DeleteValue, KEY_ALL_ACCESS
+from winreg import HKEY_CURRENT_USER, CreateKey, OpenKey, SetValueEx, QueryValueEx, CloseKey, DeleteValue, KEY_ALL_ACCESS
 import winreg
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QPushButton, QVBoxLayout,
                              QWidget, QLabel, QCheckBox, QMessageBox, QHBoxLayout,
@@ -13,14 +13,46 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QPushButton, QVBoxLayout
 from PyQt5.QtCore import Qt, QTimer, QEvent
 from PyQt5.QtGui import QFont, QIcon
 
+class RegistryPathManager:
+    REG_ROOT = HKEY_CURRENT_USER
+    REG_PATH = r"Software\StaticServer"
+    REG_KEY = "InstallPath"
+
+    @classmethod
+    def write_install_path(cls):
+        try:
+            # 创建或打开注册表项
+            key = OpenKey(cls.REG_ROOT, cls.REG_PATH, 0, KEY_ALL_ACCESS | winreg.KEY_WOW64_64KEY)
+            # 获取当前程序所在目录
+            current_path = os.path.dirname(os.path.abspath(sys.argv[0]))
+            # 写入注册表值
+            SetValueEx(key, cls.REG_KEY, 0, winreg.REG_SZ, current_path)
+            CloseKey(key)
+            return True
+        except FileNotFoundError:
+            # 如果项不存在则创建
+            try:
+                key = CreateKey(cls.REG_ROOT, cls.REG_PATH)
+                current_path = os.path.dirname(os.path.abspath(sys.argv[0]))
+                SetValueEx(key, cls.REG_KEY, 0, winreg.REG_SZ, current_path)
+                CloseKey(key)
+                return True
+            except Exception as e:
+                print(f"创建注册表项失败: {e}")
+                return False
+        except Exception as e:
+            print(f"写入安装路径失败: {e}")
+            return False
+        
 class CustomHandler(SimpleHTTPRequestHandler):
     def do_POST(self):
         content_length = int(self.headers['Content-Length'])
         post_data = self.rfile.read(content_length).decode('utf-8')
         
         try:
+            cleaned_data = post_data.replace('\r\n', ' ').replace('\n', ' ')  # 或直接 strip()
             with open('sentence.txt', 'w', encoding='utf-8') as f:
-                f.write(post_data)
+                f.write(cleaned_data)
             self.send_response(200)
             self.send_header('Content-type', 'text/plain')
             self.end_headers()
@@ -57,6 +89,9 @@ class ServerThread(threading.Thread):
         self.port = port
         self.server = None
         self.handler = CustomHandler  
+
+        if not RegistryPathManager.write_install_path():
+            QMessageBox.warning(self, "警告", "无法写入安装路径到注册表！")
 
     def run(self):
         os.chdir("static")

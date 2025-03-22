@@ -83,13 +83,15 @@ document.addEventListener('DOMContentLoaded', function() {
           }
           displayArea.innerHTML = `<div class="sentence-text">${content}</div>`;
             // 新增保存到服务器的代码
-          fetch('/save_sentence', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'text/plain; charset=utf-8'
-            },
-            body: content
-          }).catch(error => console.error('保存失败:', error));
+          const cleanedContent = content.replace(/\r?\n/g, " ");
+            displayArea.innerHTML = `<div class="sentence-text">${cleanedContent}</div>`;
+            fetch('/save_sentence', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'text/plain; charset=utf-8'
+              },
+              body: cleanedContent  // 发送处理后的内容
+            }).catch(error => console.error('保存失败:', error));
         } catch (error) {
           console.error('获取句子失败:', error);
           displayArea.innerHTML = '获取句子失败，请稍后重试';
