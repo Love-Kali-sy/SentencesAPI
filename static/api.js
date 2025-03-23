@@ -221,27 +221,24 @@ document.addEventListener('DOMContentLoaded', function() {
   let isRefreshing = false;
 
   toggleButton.addEventListener('click', () => {
-    if (isRefreshing) {
+    if (refreshInterval) {
       clearInterval(refreshInterval);
-      refreshInterval = null; // 确保定时器被清除
+      refreshInterval = null;
       toggleButton.textContent = '开始自动刷新';
-      refreshInput.disabled = false;
     } else {
-      const interval = parseInt(refreshInput.value) * 1000;
+      const interval = parseInt(document.getElementById('refresh-interval').value) * 1000;
       if (interval >= 5000) {
-        refreshInterval = setInterval(async () => {
+        refreshInterval = setInterval(() => {
           const selectedOption = document.querySelector('.sentence-option input:checked');
           if (selectedOption) {
             selectedOption.dispatchEvent(new Event('change'));
           }
         }, interval);
         toggleButton.textContent = '停止自动刷新';
-        refreshInput.disabled = true;
       } else {
         alert('刷新间隔不能小于5秒');
       }
     }
-    isRefreshing = !isRefreshing;
   });
 
   // 确保默认加载逻辑不会触发自动刷新

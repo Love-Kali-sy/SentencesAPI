@@ -1,0 +1,30 @@
+<configuration>
+  <!-- 定义日志文件的存储位置 -->
+  <property name="LOG_DIR" value="./logs" />
+
+  <!-- 控制台输出 -->
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- 文件输出 -->
+  <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${LOG_DIR}/post-requests.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+      <!-- 每天生成一个新的日志文件 -->
+      <fileNamePattern>${LOG_DIR}/post-requests.%d{yyyy-MM-dd}.log</fileNamePattern>
+      <maxHistory>30</maxHistory> <!-- 保留最近30天的日志 -->
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <!-- 日志级别配置 -->
+  <root level="info">
+    <appender-ref ref="CONSOLE" />
+    <appender-ref ref="FILE" />
+  </root>
+</configuration>

@@ -12,6 +12,8 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QPushButton, QVBoxLayout
                              QSystemTrayIcon, QMenu, QAction)
 from PyQt5.QtCore import Qt, QTimer, QEvent
 from PyQt5.QtGui import QFont, QIcon
+import logging
+from logging.handlers import RotatingFileHandler
 
 class RegistryPathManager:
     REG_ROOT = HKEY_CURRENT_USER
@@ -46,18 +48,31 @@ class RegistryPathManager:
         
 class CustomHandler(SimpleHTTPRequestHandler):
     def do_POST(self):
-        content_length = int(self.headers['Content-Length'])
-        post_data = self.rfile.read(content_length).decode('utf-8')
-        
         try:
-            cleaned_data = post_data.replace('\r\n', ' ').replace('\n', ' ')  # 或直接 strip()
-            with open('sentence.txt', 'w', encoding='utf-8') as f:
-                f.write(cleaned_data)
+            # 记录请求来源 IP 和路径
+            logging.info(f"POST 请求来自: {self.client_address[0]}:{self.client_address[1]}, 路径: {self.path}")
+
+            # 获取请求体内容
+            content_length = int(self.headers['Content-Length'])
+            post_data = self.rfile.read(content_length).decode('utf-8')
+
+            # 确保写入路径正确
+            file_path = os.path.join(os.getcwd(), 'sentence.txt')  # 确保路径为 ./sentences/static/sentence.txt
+            with open(file_path, 'w', encoding='utf-8') as f:
+                f.write(post_data)
+
+            # 记录日志
+            logging.info(f"POST 请求成功: {post_data}")
+
+            # 返回成功响应
             self.send_response(200)
             self.send_header('Content-type', 'text/plain')
             self.end_headers()
             self.wfile.write(b'File saved successfully')
         except Exception as e:
+            # 记录错误日志
+            logging.error(f"POST 请求失败: {str(e)}")
+            # 返回错误响应
             self.send_error(500, f"Error saving file: {str(e)}")
             
     def do_GET(self):
@@ -88,20 +103,36 @@ class ServerThread(threading.Thread):
         super().__init__()
         self.port = port
         self.server = None
-        self.handler = CustomHandler  
-
-        if not RegistryPathManager.write_install_path():
-            QMessageBox.warning(self, "警告", "无法写入安装路径到注册表！")
+        self.handler = CustomHandler
+        self.running = True  # 添加标志位
 
     def run(self):
         os.chdir("static")
         self.server = ThreadingHTTPServer(('', self.port), self.handler)
-        self.server.serve_forever()
+        logging.info(f"服务器已启动，监听端口 {self.port}")
+        while self.running:  # 使用标志位控制线程运行
+            self.server.handle_request()  # 处理单个请求
 
     def stop(self):
         if self.server:
-            self.server.shutdown()
-            self.server.server_close()
+            logging.info("正在关闭服务器...")
+            self.running = False  # 设置标志位为 False，停止循环
+            self.server.shutdown()  # 停止服务器
+            self.server.server_close()  # 关闭服务器
+            self.terminate_request_threads()  # 清理活动线程
+            logging.info("服务器已停止")
+
+    def terminate_request_threads(self):
+        # 获取所有活动线程
+        threads = threading.enumerate()
+        for thread in threads:
+            # 检查是否是 process_request_thread
+            if thread.name.startswith("Thread-") and "process_request_thread" in thread.name:
+                logging.info(f"正在终止线程: {thread.name}")
+                try:
+                    thread.join(timeout=1)  # 等待线程结束
+                except Exception as e:
+                    logging.error(f"无法终止线程 {thread.name}: {str(e)}")
 
 class PortChecker:
     @staticmethod
@@ -423,3 +454,17 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# 初始化日志记录
+log_dir = os.path.join(os.getcwd(), "logs")
+os.makedirs(log_dir, exist_ok=True)
+log_file = os.path.join(log_dir, "post-requests.log")
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+    handlers=[
+        RotatingFileHandler(log_file, maxBytes=5 * 1024 * 1024, backupCount=5),  # 每个日志文件最大5MB，保留5个备份
+        logging.StreamHandler()
+    ]
+)

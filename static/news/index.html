@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NewAPI</title>
+  <link rel="stylesheet" href="news.css">
+</head>
+<body>
+  <div class="theme-switcher">
+    <!-- ...existing code... -->
+  </div>
+  <div class="sentence-container">
+    <h1 class="milky">NewAPI</h1>
+    <!-- 保留一个输入框 -->
+    <div class="button-container" style="text-align: center; margin-top: 20px;">
+      <button id="start-fetch">启动自动获取</button>
+      <!-- 统一输入框样式 -->
+      <input type="number" id="interval-input" min="1" value="5" placeholder="秒">
+      <button id="send-to-classisland">发送到 ClassIsland</button>
+      <div id="api-url-display" style="margin-top: 10px; font-size: 14px; color: #666;"></div>
+    </div>
+    <div id="news-container" class="sentence-options">
+      <!-- 动态生成新闻按钮 -->
+    </div>
+  </div>
+  <footer style="text-align: center; margin-top: 20px; font-size: 14px; color: #666;">
+    <a href="../index.html" class="return-link" style="text-decoration: none; background-color: var(--primary-color); color: var(--bg-color); padding: 8px 16px; border-radius: 20px; font-size: 14px; box-shadow: 0 2px 4px var(--shadow-color);">返回主界面</a>
+    <br><br>
+    &copy; 2025 Love_kali_sy. All rights reserved.
+  </footer>
+  <script src="news.js"></script>
+</body>
+</html>

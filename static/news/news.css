@@ -1,0 +1,111 @@
+/* 页面整体样式 */
+body {
+  background-color: #f9f9f9;
+  color: #333;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* 标题样式 */
+.milky {
+  font-size: 80px;
+  color: #3366FF;
+  text-shadow: 0 8px 10px #6699FF;
+  font-weight: bolder;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* 按钮容器样式 */
+.button-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* 按钮样式 */
+.button-container button {
+  background-color: #4a90e2;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 0 10px;
+  transition: all 0.3s ease;
+}
+
+.button-container button:hover {
+  background-color: #357abd;
+  transform: scale(1.05);
+}
+
+/* 输入框样式 */
+.button-container input[type="number"] {
+  padding: 8px 12px;
+  border: 2px solid #4a90e2;
+  border-radius: 20px;
+  font-size: 16px;
+  color: #333;
+  width: 80px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.button-container input[type="number"]:focus {
+  outline: none;
+  border-color: #357abd;
+  box-shadow: 0 0 5px rgba(53, 122, 189, 0.5);
+}
+
+/* API URL 显示样式 */
+#api-url-display {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+}
+
+/* 新闻按钮容器样式 */
+#news-container {
+  display: flex;
+  flex-direction: column; /* 修改为列方向 */
+  gap: 15px;
+  justify-content: flex-start; /* 从顶部开始排列 */
+  align-items: center; /* 居中对齐 */
+  margin: 30px 0;
+  padding: 15px;
+}
+
+/* 新闻按钮样式 */
+.sentence-option {
+  background-color: #fff;
+  color: #333;
+  border: 2px solid #4a90e2;
+  border-radius: 20px;
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 80%; /* 设置按钮宽度 */
+  max-width: 600px; /* 限制最大宽度 */
+  text-align: center; /* 文本居中 */
+  font-size: 18px; /* 调大字体大小 */
+  font-weight: bold; /* 增加字体粗细 */
+}
+
+.sentence-option:hover {
+  background-color: #4a90e2;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 页脚样式 */
+footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #666;
+}
