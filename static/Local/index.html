@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Local功能页面</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="theme-switcher">
+    <button id="theme-toggle">切换主题</button>
+  </div>
+  <div class="sentence-container">
+    <h1 class="milky">Local功能页面</h1>
+    <div class="sentence-options">
+      <div class="sentence-option">
+        <input type="radio" id="feature1" name="feature" value="feature1">
+        <label for="feature1">随机英语</label>
+      </div>
+      <div class="sentence-option">
+        <input type="radio" id="feature2" name="feature" value="feature2">
+        <label for="feature2">功能2</label>
+      </div>
+      <div class="sentence-option">
+        <input type="radio" id="feature3" name="feature" value="feature3">
+        <label for="feature3">功能3</label>
+      </div>
+      <div class="sentence-option">
+        <input type="radio" id="feature4" name="feature" value="feature4">
+        <label for="feature4">功能4</label>
+      </div>
+    </div>
+    <div class="sentence-display">
+      <div class="sentence-text">请选择一个功能</div>
+    </div>
+    <div class="refresh-control">
+      <label for="refresh-interval">自动刷新间隔（秒）：</label>
+      <input type="number" id="refresh-interval" min="5" value="10" class="refresh-input">
+      <button id="start-refresh" class="refresh-button">开始刷新</button>
+      <button id="stop-refresh" class="refresh-button" disabled>停止刷新</button>
+    </div>
+  </div>
+  <footer style="text-align: center; margin-top: 20px; font-size: 14px; color: #666;">
+    &copy; 2025 Local功能页面. All rights reserved.
+  </footer>
+  <script src="script.js"></script>
+  <script>
+    // 自动刷新功能
+    const refreshIntervalInput = document.getElementById('refresh-interval');
+    const startRefreshButton = document.getElementById('start-refresh');
+    const stopRefreshButton = document.getElementById('stop-refresh');
+    let refreshTimer = null;
+
+    startRefreshButton.addEventListener('click', () => {
+      const interval = parseInt(refreshIntervalInput.value, 10) * 1000;
+      if (isNaN(interval) || interval < 5000) {
+        alert('刷新间隔必须大于或等于 5 秒');
+        return;
+      }
+      refreshTimer = setInterval(() => {
+        location.reload();
+      }, interval);
+      startRefreshButton.disabled = true;
+      stopRefreshButton.disabled = false;
+    });
+
+    stopRefreshButton.addEventListener('click', () => {
+      clearInterval(refreshTimer);
+      refreshTimer = null;
+      startRefreshButton.disabled = false;
+      stopRefreshButton.disabled = true;
+    });
+  </script>
+</body>
+</html>
