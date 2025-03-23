@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WeatherAPI</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="theme-switcher">
+    <button id="theme-toggle">切换主题</button>
+  </div>
+  <div class="weather-container">
+    <div class="right-panel">
+      <div class="current-city">
+        <strong>当前城市：</strong><span id="current-city">加载中...</span>
+      </div>
+    </div>
+    <div class="left-panel">
+      <button class="left-button" id="show-weather">显示天气</button>
+      <button class="left-button" id="search-city">搜索城市</button>
+      <button class="left-button">预留按钮1</button>
+      <button class="left-button">预留按钮2</button>
+    </div>
+    <div class="main-panel">
+      <h1 class="milky">WeatherAPI</h1>
+      <input type="text" id="city-search" placeholder="输入城市名称" class="search-box">
+      <div class="weather-display">
+        <div class="weather-text sentence-option disabled">
+          请选择一个操作
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer style="text-align: center; margin-top: 20px; font-size: 14px; color: #666;">
+    &copy; 2025 Love_kali_sy. All rights reserved.<br>
+    开源地址：<a href="https://github.com/Love-Kali-sy/WeatherAPI" target="_blank" rel="noopener noreferrer">https://github.com/Love-Kali-sy/WeatherAPI</a>
+  </footer>
+  <script src="weather.js"></script>
+  <script>
+    // 主题切换功能
+    const themeToggle = document.getElementById('theme-toggle');
+    const htmlElement = document.documentElement;
+
+    // 初始化主题
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    htmlElement.setAttribute('data-theme', savedTheme);
+    themeToggle.textContent = savedTheme === 'light' ? '🌙 暗黑模式' : '☀️ 明亮模式';
+
+    // 切换主题
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = htmlElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      htmlElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      themeToggle.textContent = newTheme === 'light' ? '🌙 暗黑模式' : '☀️ 明亮模式';
+    });
+  </script>
+</body>
+</html>

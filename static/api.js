@@ -268,4 +268,10 @@ window.addEventListener('beforeunload', () => {
     },
     body: JSON.stringify({ port: 8389 }),
   }).catch(error => console.error('关闭端口失败:', error));
+
+  // 删除小托盘图标
+  if (typeof window.tray !== 'undefined' && window.tray.remove) {
+    window.tray.remove();
+    console.log('小托盘图标已删除');
+  }
 });
