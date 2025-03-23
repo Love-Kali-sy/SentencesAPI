@@ -11,10 +11,10 @@ using Microsoft.Win32;
 namespace SentencesAPI
 {
     [ComponentInfo(
-        "3DFE17BA-92D3-9E14-F5CA-CC9EE40C5F58",
-        "珨晟",
+        "3DFE17BA-92D3-9E14-F5CA-CC9EE40C5F59",
+        "Sentences",
         PackIconKind.CalendarOutline,
-        "婓翋賜醱珆尨珨晟﹝"
+        "SentencesAPI"
     )]
     public partial class MySentencesAPI : ComponentBase
     {

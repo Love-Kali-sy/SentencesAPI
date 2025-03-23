@@ -40,7 +40,7 @@
               "RelativeDocumentMoniker": "SentencesAPI\\SentencesAPI.xaml.cs",
               "ToolTip": "D:\\sentences\\Plugin\\SentencesAPI\\SentencesAPI\\SentencesAPI.xaml.cs*",
               "RelativeToolTip": "SentencesAPI\\SentencesAPI.xaml.cs*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAXAAAAAAAAAA==",
+              "ViewState": "AgIAABcAAAAAAAAAAADwvw0AAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-22T12:54:58.129Z",
               "EditorCaption": ""
@@ -54,8 +54,7 @@
               "ToolTip": "D:\\sentences\\Plugin\\SentencesAPI\\SentencesAPI\\SentencesAPI.xaml",
               "RelativeToolTip": "SentencesAPI\\SentencesAPI.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-03-22T12:54:30.012Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-22T12:54:30.012Z"
             },
             {
               "$type": "Document",
@@ -67,8 +66,7 @@
               "RelativeToolTip": "SentencesAPI\\Plugin.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAuwAkAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-22T12:53:11.869Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-22T12:53:11.869Z"
             },
             {
               "$type": "Document",
@@ -80,8 +78,7 @@
               "RelativeToolTip": "SentencesAPI\\manifest.yml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003775|",
-              "WhenOpened": "2025-03-22T12:53:10.001Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-22T12:53:10.001Z"
             },
             {
               "$type": "Document",
@@ -93,8 +90,7 @@
               "RelativeToolTip": "SentencesAPI\\AssemblyInfo.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAADwvwAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-22T12:53:08.212Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-22T12:53:08.212Z"
             }
           ]
         }

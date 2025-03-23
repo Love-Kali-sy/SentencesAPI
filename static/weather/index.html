@@ -19,16 +19,44 @@
     <div class="left-panel">
       <button class="left-button" id="show-weather">显示天气</button>
       <button class="left-button" id="search-city">搜索城市</button>
-      <button class="left-button">预留按钮1</button>
+      <button class="left-button" id="fifteen-day-weather">15天天气显示</button>
       <button class="left-button">预留按钮2</button>
     </div>
     <div class="main-panel">
-      <h1 class="milky">WeatherAPI</h1>
+      <h1 class="milky">WeatherAPI</h1> <!-- 修改标题样式 -->
       <input type="text" id="city-search" placeholder="输入城市名称" class="search-box">
       <div class="weather-display">
         <div class="weather-text sentence-option disabled">
           请选择一个操作
         </div>
+      </div>
+      <div id="real-time-weather" style="margin-top: 20px; padding: 15px; border: 2px solid var(--primary-color); border-radius: 10px; background-color: var(--bg-color); color: var(--text-color); text-align: center; box-shadow: 0 2px 4px var(--shadow-color);">
+        实时天气加载中...
+      </div>
+      <div class="forecast-container">
+        <div class="forecast-box">明天</div>
+        <div class="forecast-box">后天</div>
+        <div class="forecast-box">第3天</div>
+        <div class="forecast-box">第4天</div>
+        <div class="forecast-box">第5天</div>
+        <div class="forecast-box">第6天</div>
+      </div>
+      <div class="fifteen-day-container" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 20px;">
+        <div class="fifteen-day-box">第1天</div>
+        <div class="fifteen-day-box">第2天</div>
+        <div class="fifteen-day-box">第3天</div>
+        <div class="fifteen-day-box">第4天</div>
+        <div class="fifteen-day-box">第5天</div>
+        <div class="fifteen-day-box">第6天</div>
+        <div class="fifteen-day-box">第7天</div>
+        <div class="fifteen-day-box">第8天</div>
+        <div class="fifteen-day-box">第9天</div>
+        <div class="fifteen-day-box">第10天</div>
+        <div class="fifteen-day-box">第11天</div>
+        <div class="fifteen-day-box">第12天</div>
+        <div class="fifteen-day-box">第13天</div>
+        <div class="fifteen-day-box">第14天</div>
+        <div class="fifteen-day-box">第15天</div>
       </div>
     </div>
   </div>
