@@ -36,10 +36,6 @@
         </select>
       </div>
       <div class="sentence-option">
-        <input type="radio" id="random-sentence" name="api" value="random-sentence">
-        <label for="random-sentence">随机中英文句子</label>
-      </div>
-      <div class="sentence-option">
         <input type="radio" id="poetry" name="api" value="poetry">
         <label for="poetry">随机一句诗</label>
       </div>
@@ -57,9 +53,22 @@
           <option value="kfc">疯狂星期四</option>
         </select>
       </div>
+      <div class="sentence-option">
+        <input type="radio" id="random-sentence" name="api" value="random-sentence">
+        <label for="random-sentence">随机中英文句子</label>
+      </div>
     </div>
     <div class="sentence-display">
       <div class="sentence-text">请选择一个句子类型</div>
+    </div>
+    <!-- 修改显示当前调用 API 名称和地址的 UI -->
+    <div class="current-api">
+      <div class="current-api-item">
+        <strong>当前调用的 API 名称：</strong><span id="current-api-name">无</span>
+      </div>
+      <div class="current-api-item">
+        <strong>当前调用的 API 地址：</strong><span id="current-api-url">无</span>
+      </div>
     </div>
   </div>
   <footer style="text-align: center; margin-top: 20px; font-size: 14px; color: #666;">
