@@ -119,20 +119,7 @@ class ServerThread(threading.Thread):
             self.running = False  # 设置标志位为 False，停止循环
             self.server.shutdown()  # 停止服务器
             self.server.server_close()  # 关闭服务器
-            self.terminate_request_threads()  # 清理活动线程
             logging.info("服务器已停止")
-
-    def terminate_request_threads(self):
-        # 获取所有活动线程
-        threads = threading.enumerate()
-        for thread in threads:
-            # 检查是否是 process_request_thread
-            if thread.name.startswith("Thread-") and "process_request_thread" in thread.name:
-                logging.info(f"正在终止线程: {thread.name}")
-                try:
-                    thread.join(timeout=1)  # 等待线程结束
-                except Exception as e:
-                    logging.error(f"无法终止线程 {thread.name}: {str(e)}")
 
 class PortChecker:
     @staticmethod
@@ -220,6 +207,21 @@ class MainWindow(QMainWindow):
         if self.is_auto_start:  # 自动启动模式
             self.hide()
             self.start_server()
+
+    # ...existing code...
+
+    def closeEvent(self, event):
+        # 检查服务是否已停止
+        if self.server_thread and self.server_thread.is_alive():
+            reply = QMessageBox.warning(
+                self,
+                "警告",
+                "服务正在运行中，请先停止服务再关闭窗口。",
+                QMessageBox.Ok
+            )
+            event.ignore()  # 阻止窗口关闭
+        else:
+            event.accept()  # 允许窗口关闭
 
     def init_ui(self):
         self.setWindowTitle("静态文件服务器")
@@ -362,14 +364,16 @@ class MainWindow(QMainWindow):
         self.hide()
 
     def quit_app(self):
+        # 确保服务已停止
         if self.server_thread and self.server_thread.is_alive():
-            self.stop_server()
+            QMessageBox.warning(self, "警告", "请先停止服务再退出程序。")
+            return
         self.tray_icon.hide()
         QApplication.quit()
 
     def changeEvent(self, event):
-        if event.type() == QEvent.WindowStateChange:
-            if self.windowState() & Qt.WindowMinimized:
+        if (event.type() == QEvent.WindowStateChange):
+            if (self.windowState() & Qt.WindowMinimized):
                 self.minimize_to_tray()
                 event.ignore()
         super().changeEvent(event)
@@ -378,15 +382,15 @@ class MainWindow(QMainWindow):
         self.auto_start_cb.setChecked(AutoStartManager.is_auto_start_enabled())
 
     def toggle_auto_start(self, state):
-        if state == Qt.Checked:
-            if not AutoStartManager.enable_auto_start():
+        if (state == Qt.Checked):
+            if (not AutoStartManager.enable_auto_start()):
                 QMessageBox.warning(self, "错误", "无法启用开机自启功能")
         else:
-            if not AutoStartManager.disable_auto_start():
+            if (not AutoStartManager.disable_auto_start()):
                 QMessageBox.warning(self, "错误", "无法禁用开机自启功能")
 
     def toggle_server(self):
-        if self.server_thread and self.server_thread.is_alive():
+        if (self.server_thread and self.server_thread.is_alive()):
             self.stop_server()
         else:
             self.start_server()
@@ -394,14 +398,10 @@ class MainWindow(QMainWindow):
 
     def check_port(self):
         pid = PortChecker.check_port(8389)
-        if pid:
-            reply = QMessageBox.question(
-                self, '端口占用',
-                f'端口8389被进程{pid}占用，是否终止该进程？',
-                QMessageBox.Yes | QMessageBox.No
-            )
-            if reply == QMessageBox.Yes:
-                if PortChecker.kill_process(pid):
+        if (pid):
+            reply = QMessageBox.question(self, '端口占用', f'端口8389被进程{pid}占用，是否终止该进程？', QMessageBox.Yes | QMessageBox.No)
+            if (reply == QMessageBox.Yes):
+                if (PortChecker.kill_process(pid)):
                     QMessageBox.information(self, '成功', '进程已终止')
                     return True
                 else:
@@ -412,18 +412,25 @@ class MainWindow(QMainWindow):
         return True
 
     def start_server(self):
-        if not self.check_port():
+        if (not self.check_port()):
             return
-            
         self.server_thread = ServerThread()
         self.server_thread.start()
         self.start_btn.setText("停止服务")
         self.status_label.setText("当前状态：服务运行中\n访问地址：http://localhost:8389")
 
     def stop_server(self):
-        if self.server_thread:
-            self.server_thread.stop()
-            self.server_thread.join()
+        if (self.server_thread):
+            logging.info("正在停止服务...")
+            self.server_thread.stop()  # 停止服务器线程
+            QTimer.singleShot(100, self.check_server_thread)  # 使用定时器检查线程状态
+
+    def check_server_thread(self):
+        if self.server_thread.is_alive():
+            QTimer.singleShot(100, self.check_server_thread)  # 继续检查线程状态
+        else:
+            logging.info("服务已完全停止")
+            self.server_thread = None
             self.start_btn.setText("启动服务")
             self.status_label.setText("当前状态：服务已停止")
 
